@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>A Special Question For You 💕</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #e8556d;
+    --blush: #f7c5cf;
+    --deep: #2d1a1e;
+    --cream: #fdf5f0;
+    --gold: #c9a96e;
+    --petal: #f9e0e5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    min-height: 100%;
+    width: 100%;
+  }
+
+  body {
+    min-height: 100vh;
+    background: var(--deep);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 0;
+    cursor: default;
+  }
+
+  /* ── Starfield ── */
+  .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    animation: twinkle var(--d, 3s) ease-in-out infinite var(--delay, 0s);
+  }
+  @keyframes twinkle {
+    0%,100% { opacity: .15; transform: scale(1); }
+    50%      { opacity: .9;  transform: scale(1.4); }
+  }
+
+  /* ── Floating petals ── */
+  .petals { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+  .petal {
+    position: absolute;
+    top: -60px;
+    animation: fall linear infinite;
+    opacity: .7;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* ── Card ── */
+  .card {
+    position: relative; z-index: 10;
+    background: linear-gradient(145deg, rgba(253,245,240,.97) 0%, rgba(247,197,207,.6) 100%);
+    border: 1px solid var(--gold);
+    border-radius: 24px;
+    padding: clamp(28px, 6vw, 64px) clamp(20px, 7vw, 80px);
+    max-width: 560px;
+    width: 92vw;
+    text-align: center;
+    box-shadow: 0 32px 80px rgba(45,26,30,.55), 0 0 0 1px rgba(201,169,110,.2) inset;
+    backdrop-filter: blur(6px);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 24px;
+    background: radial-gradient(ellipse at 30% 20%, rgba(232,85,109,.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .ornament {
+    display: flex; align-items: center; gap: 12px;
+    margin: 0 auto 22px;
+    color: var(--gold);
+    font-size: 16px;
+    letter-spacing: 6px;
+  }
+  .ornament::before, .ornament::after {
+    content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold));
+  }
+  .ornament::after { transform: scaleX(-1); }
+
+  .emoji-hero {
+    font-size: clamp(44px, 12vw, 72px);
+    display: block;
+    animation: heartbeat 1.8s ease-in-out infinite;
+    margin-bottom: 16px;
+  }
+  @keyframes heartbeat {
+    0%,100% { transform: scale(1); }
+    14%     { transform: scale(1.15); }
+    28%     { transform: scale(1); }
+    42%     { transform: scale(1.1); }
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(20px, 5.5vw, 36px);
+    color: var(--deep);
+    line-height: 1.25;
+    margin-bottom: 10px;
+  }
+  h1 em { color: var(--rose); font-style: italic; }
+
+  .sub {
+    font-size: clamp(13px, 3.5vw, 18px);
+    color: #7a4f56;
+    margin-bottom: 28px;
+    font-style: italic;
+    letter-spacing: .5px;
+  }
+
+  /* ── Buttons ── */
+  .btn-group {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 8px;
+    /* Extra space so No button has room to shift without clipping */
+    padding: 16px 10px 60px;
+    overflow: visible;
+  }
+
+  .btn {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(15px, 4vw, 20px);
+    padding: 13px 32px;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .2s;
+    font-weight: 600;
+    letter-spacing: .5px;
+    position: relative;
+    overflow: visible;
+    touch-action: manipulation;
+  }
+
+  .btn-yes {
+    background: linear-gradient(135deg, var(--rose), #c0395a);
+    color: white;
+    box-shadow: 0 6px 24px rgba(232,85,109,.45);
+  }
+  .btn-yes:hover, .btn-yes:active {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 12px 32px rgba(232,85,109,.6);
+  }
+  .btn-yes::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,.2), transparent);
+    border-radius: inherit;
+  }
+
+  .btn-no {
+    background: transparent;
+    color: #b07080;
+    border: 1.5px solid #d9a0aa;
+    box-shadow: none;
+    /* will-change for smooth GPU transform */
+    will-change: transform;
+  }
+
+  /* ── Screens ── */
+  .screen { display: none; }
+  .screen.active { display: block; animation: fadeUp .5s cubic-bezier(.22,1,.36,1) both; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* choice grid */
+  .choice-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 24px;
+  }
+  @media (max-width: 360px) {
+    .choice-grid { grid-template-columns: 1fr; }
+  }
+  .choice-btn {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(14px, 3.5vw, 19px);
+    padding: 18px 12px;
+    border: 1.5px solid var(--gold);
+    border-radius: 16px;
+    background: linear-gradient(145deg, rgba(255,255,255,.9), rgba(249,224,229,.7));
+    color: var(--deep);
+    cursor: pointer;
+    transition: all .25s;
+    touch-action: manipulation;
+  }
+  .choice-btn:hover, .choice-btn:active {
+    background: linear-gradient(145deg, var(--rose), #c0395a);
+    color: white;
+    border-color: transparent;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(232,85,109,.4);
+  }
+  .choice-btn .icon { font-size: 2em; display: block; margin-bottom: 8px; }
+
+  /* final card */
+  .final-box {
+    margin-top: 22px;
+    background: linear-gradient(135deg, rgba(232,85,109,.12), rgba(201,169,110,.12));
+    border: 1px solid var(--gold);
+    border-radius: 16px;
+    padding: 22px 20px;
+  }
+  .final-box .date-label {
+    font-size: clamp(12px, 3vw, 15px);
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .final-box .date-value {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(18px, 5vw, 30px);
+    color: var(--deep);
+    font-weight: 700;
+  }
+  .final-box .date-detail {
+    font-size: clamp(13px, 3.5vw, 17px);
+    color: #7a4f56;
+    margin-top: 8px;
+    font-style: italic;
+  }
+
+  .confetti-burst { position: fixed; inset: 0; pointer-events: none; z-index: 999; }
+
+  /* heart trail (desktop only) */
+  .trail-heart {
+    position: fixed;
+    pointer-events: none;
+    font-size: 18px;
+    animation: trailFade .8s ease-out forwards;
+    z-index: 900;
+    transform: translate(-50%, -50%);
+  }
+  @keyframes trailFade {
+    0%   { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%,-140%) scale(.4); }
+  }
+
+  .small-note {
+    font-size: 12px; color: #b07080; margin-top: 12px; font-style: italic;
+  }
+
+  /* ── Date Picker ── */
+  .date-picker-wrap {
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  #datePicker {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(16px, 4vw, 20px);
+    padding: 14px 20px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50px;
+    background: rgba(255,255,255,.9);
+    color: var(--deep);
+    text-align: center;
+    outline: none;
+    width: 100%;
+    max-width: 280px;
+    cursor: pointer;
+    -webkit-appearance: none;
+  }
+  #datePicker:focus {
+    border-color: var(--rose);
+    box-shadow: 0 0 0 3px rgba(232,85,109,.15);
+  }
+  .date-hint {
+    font-size: clamp(12px, 3vw, 14px);
+    color: #b07080;
+    font-style: italic;
+  }
+  .confirm-btn {
+    margin-top: 4px;
+    touch-action: manipulation;
+  }
+  @keyframes shake {
+    0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)}
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+<div class="petals" id="petals"></div>
+
+<div class="card">
+
+  <!-- ══ SCREEN 1 ══ -->
+  <div class="screen active" id="s1">
+    <div class="ornament">✦ ✦ ✦</div>
+    <span class="emoji-hero">💝</span>
+    <h1>Will you go on a <em>date</em> with me?</h1>
+    <p class="sub">I've been working up the courage to ask you this…</p>
+    <div class="btn-group" id="btnGroup">
+      <button class="btn btn-yes" onclick="goTo('s2')">Yes, of course! 💕</button>
+      <button class="btn btn-no" id="noBtn">No</button>
+    </div>
+    <p class="small-note" id="hintNote">tap carefully… 👀</p>
+  </div>
+
+  <!-- ══ SCREEN 2 ══ -->
+  <div class="screen" id="s2">
+    <div class="ornament">✦ ✦ ✦</div>
+    <span class="emoji-hero">🥰</span>
+    <h1>Yay! You said <em>Yes!</em></h1>
+    <p class="sub">Now tell me… where shall we go?</p>
+    <div class="choice-grid">
+      <button class="choice-btn" onclick="goTo('s3a')">
+        <span class="icon">🎬</span>Movie Date
+      </button>
+      <button class="choice-btn" onclick="goTo('s3b')">
+        <span class="icon">☕</span>Café Date
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN 3A ══ -->
+  <div class="screen" id="s3a">
+    <div class="ornament">✦ ✦ ✦</div>
+    <span class="emoji-hero">🎬</span>
+    <h1>Pick a <em>genre</em>!</h1>
+    <p class="sub">I'll grab the popcorn, you choose the vibe ✨</p>
+    <div class="choice-grid">
+      <button class="choice-btn" onclick="finish('movie','Romance','A beautiful evening watching a heartwarming love story, just the two of us 🍿')">
+        <span class="icon">💞</span>Romance
+      </button>
+      <button class="choice-btn" onclick="finish('movie','Adventure','An epic adventure film — because every date with you already feels like one 🌟')">
+        <span class="icon">🌟</span>Adventure
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN 3B ══ -->
+  <div class="screen" id="s3b">
+    <div class="ornament">✦ ✦ ✦</div>
+    <span class="emoji-hero">☕</span>
+    <h1>What shall we <em>eat?</em></h1>
+    <p class="sub">Good food + better company = perfect evening 🌸</p>
+    <div class="choice-grid">
+      <button class="choice-btn" onclick="finish('café','Pasta & Desserts','Cozy Italian vibes with candles, creamy pasta, and something sweet to share 🍝')">
+        <span class="icon">🍝</span>Pasta & Desserts
+      </button>
+      <button class="choice-btn" onclick="finish('café','Pizza & Waffles','Cheesy pizza and golden waffles — the most delicious date combo 🍕')">
+        <span class="icon">🍕</span>Pizza & Waffles
+      </button>
+    </div>
+  </div>
+
+
+  <!-- ══ SCREEN DATE PICKER ══ -->
+  <div class="screen" id="s_date">
+    <div class="ornament">✦ ✦ ✦</div>
+    <span class="emoji-hero">📅</span>
+    <h1>Pick our <em>Date!</em></h1>
+    <p class="sub">When should our special day be? 🌸</p>
+    <div class="date-picker-wrap">
+      <input type="date" id="datePicker" />
+      <p class="date-hint">Choose any day that feels perfect ✨</p>
+      <button class="btn btn-yes confirm-btn" onclick="confirmDate()">Confirm Date 💕</button>
+    </div>
+  </div>
+
+  <!-- ══ SCREEN 4 ══ -->
+  <div class="screen" id="s4">
+    <div class="ornament">✦ ✦ ✦</div>
+    <span class="emoji-hero" id="finalEmoji">🎉</span>
+    <h1>It's a <em>Date!</em></h1>
+    <p class="sub" id="finalDesc">Here's our plan…</p>
+    <div class="final-box">
+      <div class="date-label">📅 Our Date Night</div>
+      <div class="date-value" id="finalDate"></div>
+      <div class="date-detail" id="finalDetail">Just you & me 💕</div>
+    </div>
+    <p class="small-note">Can't wait to make memories with you 🌹</p>
+  </div>
+
+</div>
+
+<script>
+// ── Detect touch device ──
+const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+document.getElementById('hintNote').textContent = isTouch ? 'choose wisely… 👀' : 'hover carefully… 👀';
+
+// ── Stars ──
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 120; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const sz = Math.random() * 2.5 + .5;
+  s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${sz}px;height:${sz}px;--d:${(Math.random()*3+2).toFixed(1)}s;--delay:-${(Math.random()*5).toFixed(1)}s;`;
+  starsEl.appendChild(s);
+}
+
+// ── Petals ──
+const petalsEl = document.getElementById('petals');
+const petalEmojis = ['🌸','🌹','🌺','💮','🌷'];
+for (let i = 0; i < 18; i++) {
+  const p = document.createElement('div');
+  p.className = 'petal';
+  p.textContent = petalEmojis[Math.floor(Math.random()*petalEmojis.length)];
+  p.style.cssText = `left:${Math.random()*100}%;animation-duration:${(Math.random()*10+8).toFixed(1)}s;animation-delay:-${(Math.random()*12).toFixed(1)}s;font-size:${Math.random()*14+12}px;`;
+  petalsEl.appendChild(p);
+}
+
+// ── Heart trail (desktop only) ──
+if (!isTouch) {
+  document.addEventListener('mousemove', e => {
+    if (Math.random() > .18) return;
+    const h = document.createElement('div');
+    h.className = 'trail-heart';
+    h.textContent = ['💕','💗','💖','❤️','🌸'][Math.floor(Math.random()*5)];
+    h.style.left = e.clientX + 'px';
+    h.style.top  = e.clientY + 'px';
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 820);
+  });
+}
+
+// ── No button dodge logic ──
+const noBtn = document.getElementById('noBtn');
+noBtn.style.transition = 'transform .35s cubic-bezier(.34,1.56,.64,1)';
+
+// 8 directional offsets — cycles through so it always moves somewhere new
+const directions = [
+  [0, -60], [100, 0], [0, 60], [-100, 0],
+  [80, -50], [-80, -50], [80, 50], [-80, 50]
+];
+let dirIndex = 0;
+let currentX = 0, currentY = 0;
+let bobOffset = 0, bobDir = 1;
+
+// Continuous gentle bob
+function bob() {
+  bobOffset += bobDir * 0.5;
+  if (bobOffset > 10 || bobOffset < -10) bobDir *= -1;
+  noBtn.style.transform = `translate(${currentX}px, ${currentY + bobOffset}px)`;
+  requestAnimationFrame(bob);
+}
+requestAnimationFrame(bob);
+
+function dodgeNo(e) {
+  // prevent actual click from firing on touch
+  e.preventDefault();
+  e.stopPropagation();
+  const [dx, dy] = directions[dirIndex % directions.length];
+  dirIndex++;
+  currentX = dx;
+  currentY = dy;
+}
+
+// Desktop: dodge on hover
+noBtn.addEventListener('mouseenter', dodgeNo);
+
+// Mobile: dodge on touchstart (before tap registers as click)
+noBtn.addEventListener('touchstart', dodgeNo, { passive: false });
+
+// ── Screen transitions ──
+function goTo(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  // scroll card into view on mobile
+  document.querySelector('.card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// ── Store date choice & go to date picker ──
+let _dateType = '', _dateChoice = '', _dateDesc = '';
+function finish(type, choice, desc) {
+  _dateType = type;
+  _dateChoice = choice;
+  _dateDesc = desc;
+  // Set min date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('datePicker').min = today;
+  document.getElementById('datePicker').value = '';
+  goTo('s_date');
+}
+
+// ── Confirm picked date → final screen ──
+function confirmDate() {
+  const picker = document.getElementById('datePicker');
+  if (!picker.value) {
+    picker.style.borderColor = 'var(--rose)';
+    picker.style.animation = 'shake .3s ease';
+    setTimeout(() => { picker.style.animation = ''; picker.style.borderColor = ''; }, 400);
+    return;
+  }
+  const d = new Date(picker.value + 'T00:00:00');
+  const formatted = d.toLocaleDateString('en-IN', {
+    weekday:'long', day:'numeric', month:'long', year:'numeric'
+  });
+  const emojis = { movie: '🎬', café: '☕' };
+  document.getElementById('finalEmoji').textContent = emojis[_dateType] || '🎉';
+  document.getElementById('finalDate').textContent = formatted;
+  document.getElementById('finalDesc').textContent = _dateDesc;
+  document.getElementById('finalDetail').textContent =
+    `A ${_dateType} date with ${_dateChoice} — just you & me 💕`;
+  goTo('s4');
+  launchConfetti();
+}
+
+// ── Confetti burst ──
+function launchConfetti() {
+  const burst = document.createElement('div');
+  burst.className = 'confetti-burst';
+  document.body.appendChild(burst);
+  const shapes = ['💕','💗','🌸','✨','💖','🌹','⭐'];
+  const style = document.createElement('style');
+  style.textContent = `@keyframes cFly {
+    0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}
+    100%{opacity:0;transform:translate(var(--tx),var(--ty)) rotate(720deg) scale(.2)}
+  }`;
+  document.head.appendChild(style);
+  for (let i = 0; i < 60; i++) {
+    const c = document.createElement('span');
+    c.textContent = shapes[Math.floor(Math.random()*shapes.length)];
+    const tx = (Math.random()*200-100).toFixed();
+    const ty = -(Math.random()*300+80).toFixed();
+    c.style.cssText = `
+      position:absolute;
+      left:${Math.random()*100}%;
+      top:${Math.random()*30+35}%;
+      font-size:${Math.random()*18+10}px;
+      --tx:${tx}px; --ty:${ty}px;
+      animation:cFly ${(Math.random()*1.5+.8).toFixed(1)}s ease-out ${(Math.random()*.5).toFixed(2)}s forwards;
+    `;
+    burst.appendChild(c);
+  }
+  setTimeout(() => burst.remove(), 3200);
+}
+</script>
+</body>
+</html>
